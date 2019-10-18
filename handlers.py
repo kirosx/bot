@@ -1,5 +1,4 @@
 from abstract_handler import AbstractHandler
-from time import asctime as time
 from basket import Basket
 from config import BASKET_BUTTONS, CATEGORY_NAME, CLEARED
 from utils import obj_id_checker, buy_button_checker
@@ -14,9 +13,7 @@ class HandlerCommands(AbstractHandler):
         def start_handler(message):
             client = self.bd.users.find_one({'tgid': message.from_user.id})
             if not client:
-                self.bd.users.insert_one(dict(tgid=message.from_user.id, tgusername=message.from_user.username,
-                                              tgfirstname=message.from_user.first_name, is_auth=False, time=time(),
-                                              basket={}))
+                self.bd.add_new_user(message)
             self.bot.send_message(message.from_user.id, 'Choose category', reply_markup=self.buttons.set_categories())
 
 

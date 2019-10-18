@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from config import DATABASE, DB_NAME, DB_PWD, DB_USER, CATEGORY_NAME
 from json import loads
 from bson.objectid import ObjectId
+from time import asctime as time
 
 
 class Singleton(type):
@@ -29,6 +30,11 @@ class Database(metaclass=Singleton):
 
     def count_users(self):
         return self.users.find().count()
+
+    def add_new_user(self, message):
+        self.users.insert_one(dict(tgid=message.from_user.id, tgusername=message.from_user.username,
+                                   tgfirstname=message.from_user.first_name, is_auth=False, time=time(),
+                                   basket={}))
 
     @property
     def show_categories(self):
